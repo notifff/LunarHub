@@ -7,7 +7,7 @@
  Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
 ]=]
 
--- Instances: 71 | Scripts: 11 | Modules: 0 | Tags: 0
+-- Instances: 72 | Scripts: 12 | Modules: 0 | Tags: 0
 local G2L = {};
 
 -- StarterGui.LunarHub
@@ -670,6 +670,11 @@ G2L["46"]["Name"] = [[LH_Data]];
 -- StarterGui.LunarHub.LH_Core.LH_Tabs
 G2L["47"] = Instance.new("LocalScript", G2L["45"]);
 G2L["47"]["Name"] = [[LH_Tabs]];
+
+
+-- StarterGui.LunarHub.LH_Core.LH_DragWindow
+G2L["48"] = Instance.new("LocalScript", G2L["45"]);
+G2L["48"]["Name"] = [[LH_DragWindow]];
 
 
 -- StarterGui.LunarHub.CanvasGroup.CanvasGroup.Content.ScrollingFrame.Main.Noclip.Toggle.LocalScript
@@ -1403,6 +1408,8 @@ task.spawn(C_44);
 -- StarterGui.LunarHub.LH_Core
 local function C_45()
 local script = G2L["45"];
+	script.Parent.Parent = game.CoreGui
+	
 	local startTime = os.clock()
 	_G.L_Hub = _G.L_Hub or {}
 	
@@ -1435,7 +1442,7 @@ local function C_46()
 local script = G2L["46"];
 	if game["Run Service"]:IsStudio() then return end
 	
-	local folder, file = "VHUB_DATA", "VHUB_DATA/settings.json"
+	local folder, file = "LHUB_DATA", "LHUB_DATA/settings.json"
 	
 	if not isfolder(folder) then makefolder(folder) end
 	if not isfile(file) then writefile(file, "{}") end
@@ -1564,5 +1571,67 @@ local script = G2L["47"];
 	end
 end;
 task.spawn(C_47);
+-- StarterGui.LunarHub.LH_Core.LH_DragWindow
+local function C_48()
+local script = G2L["48"];
+	local UIS = game:GetService("UserInputService")
+	local RunService = game:GetService("RunService")
+	
+	local window = script.Parent.Parent:WaitForChild("CanvasGroup")
+	local topbar = window:FindFirstChild("Topbar", true)
+	
+	if not topbar or not topbar:IsA("GuiObject") then
+		error("Topbar not found")
+	end
+	
+	topbar.Active = true
+	
+	local dragging = false
+	local dragStart
+	local startPos
+	local targetPos = window.Position
+	
+	local function updateTarget(input)
+		local delta = input.Position - dragStart
+		targetPos = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+	end
+	
+	topbar.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			dragging = true
+			dragStart = input.Position
+			startPos = window.Position
+	
+			local changedConn
+			changedConn = input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+					if changedConn then
+						changedConn:Disconnect()
+					end
+				end
+			end)
+		end
+	end)
+	
+	UIS.InputChanged:Connect(function(input)
+		if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+			updateTarget(input)
+		end
+	end)
+	
+	RunService.RenderStepped:Connect(function(dt)
+		if dragging then
+			local alpha = math.clamp(dt * 18, 0, 1)
+			window.Position = window.Position:Lerp(targetPos, alpha)
+		end
+	end)
+end;
+task.spawn(C_48);
 
 return G2L["1"], require;
