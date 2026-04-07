@@ -90,6 +90,7 @@ G2L["9"]["Size"] = UDim2.new(1, 0, 0.045, 0);
 G2L["9"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["9"]["Text"] = [[]];
 G2L["9"]["Name"] = [[Main]];
+G2L["9"]["Position"] = UDim2.new(0, 0, 0, 0);
 
 
 -- StarterGui.LunarHub.CanvasGroup.CanvasGroup.Tabs.ScrollingFrame.Main.TextLabel
@@ -183,7 +184,7 @@ G2L["f"]["Position"] = UDim2.new(0.06981, 0, 0.14286, 0);
 G2L["10"] = Instance.new("ImageLabel", G2L["e"]);
 G2L["10"]["BorderSizePixel"] = 0;
 G2L["10"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-G2L["10"]["Image"] = [[rbxassetid://113185309957540]];
+G2L["10"]["Image"] = [[rbxassetid://118266210014502]];
 G2L["10"]["Size"] = UDim2.new(0.05571, 0, 0.86641, 0);
 G2L["10"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 G2L["10"]["BackgroundTransparency"] = 1;
